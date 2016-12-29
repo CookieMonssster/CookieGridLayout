@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import static android.view.View.MeasureSpec.EXACTLY;
+import static android.view.View.MeasureSpec.makeMeasureSpec;
+
 /**
  * Created by Cookie on 28.12.2016.
  */
@@ -77,9 +80,10 @@ public class CookieGridLayout extends ViewGroup {
                 startLeft = workspaceLeft;
             }
 
-            child.layout(startLeft, workspaceTop, child.getLayoutParams().width, child.getLayoutParams().height);
-            //child.layout(startLeft, workspaceTop, startLeft + childWidth, workspaceTop + childHeight);
+            child.measure(makeMeasureSpec(childWidth, EXACTLY), makeMeasureSpec(childHeight, EXACTLY));
+            child.layout(startLeft, workspaceTop, startLeft + childWidth, workspaceTop + childHeight);
 
+            child.invalidate();
         }
     }
 }
