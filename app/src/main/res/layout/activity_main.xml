@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:cookie="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
@@ -14,9 +14,10 @@
         android:layout_height="match_parent"
         android:background="@android:color/white"
         cookie:square="true"
-        cookie:gap="0.03"
-        cookie:columns="4"
+        cookie:gap="0.01"
+        cookie:columns="2"
         cookie:outsideGap="0"
+        cookie:heightMultiple="1"
         >
 
         <Button
@@ -67,5 +68,29 @@
             android:textColor="@android:color/white"
             android:gravity="center"
             android:text="kloppo"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:text="kloppo"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:text="kloppo"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:text="kloppo"/>
     </com.binarapps.cookiegridlayout.layout.CookieGridLayout>
-</RelativeLayout>
+</ScrollView>

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.binarapps.cookiegridlayout.R;
 
@@ -19,9 +21,11 @@ import static android.view.View.MeasureSpec.makeMeasureSpec;
 public class CookieGridLayout extends ViewGroup {
 
     private boolean square;
+    private int columns;
+    private int rows;
     private float gapPercent;
     private float outsideGapPercent;
-    private int columns;
+    private float heigthMultiple;
 
 
     public CookieGridLayout(Context context) {
@@ -40,8 +44,18 @@ public class CookieGridLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        rows = getRowsCount(getChildCount());
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
+        if(square) {
+            int size = widthSize / columns;
+            heightSize = size * rows;
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.AT_MOST);
+        } else {
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(Math.round(heightSize * heigthMultiple), MeasureSpec.AT_MOST);
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
@@ -67,10 +81,6 @@ public class CookieGridLayout extends ViewGroup {
         if(square) {
             childHeight = childWidth;
         } else {
-            int rows = count / columns;
-            if(count % columns > 0) {
-                rows = rows + 1;
-            }
             int verticalGapCount = rows - 1;
             childHeight = (height - (verticalGapCount * gap)) / rows;
         }
@@ -105,6 +115,14 @@ public class CookieGridLayout extends ViewGroup {
         return (i + 1) % columns == 0;
     }
 
+    private int getRowsCount(int count) {
+        int rows = count / columns;
+        if(count % columns > 0) {
+            rows = rows + 1;
+        }
+        return rows;
+    }
+
     private void readAttributes(Context context, AttributeSet attrs) {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CookieGridLayout, 0, 0);
 
@@ -113,6 +131,10 @@ public class CookieGridLayout extends ViewGroup {
             gapPercent = a.getFloat(R.styleable.CookieGridLayout_gap, 0.01f);
             outsideGapPercent = a.getFloat(R.styleable.CookieGridLayout_outsideGap, 0.01f);
             columns = a.getInteger(R.styleable.CookieGridLayout_columns, 3);
+            if(columns == 0) {
+                columns = 1;
+            }
+            heigthMultiple = a.getFloat(R.styleable.CookieGridLayout_heightMultiple, 1);
         } finally {
             a.recycle();
         }

@@ -4,5 +4,6 @@
         <attr name="gap" format="float" />
         <attr name="outsideGap" format="float" />
         <attr name="columns" format="integer" />
+        <attr name="heightMultiple" format="float" />
     </declare-styleable>
 </resources>
