@@ -64,21 +64,14 @@ public class CookieGridLayout extends ViewGroup {
         int gap = Math.round(gapPercent * width);
 
         int childWidth = (width - (gapCount * gap)) / count;
-        int childHeight = 50;
-        if(square) {
-            childHeight = childWidth;
-        }
-
-
 
         for(int i = 0; i < count; i++) {
             final View child = getChildAt(i);
-
-            int startLeft = workspaceLeft + (i * childWidth) + (i * gap);
-
-            if(i == 0) {
-                startLeft = workspaceLeft;
+            int childHeight = child.getHeight();
+            if(square) {
+                childHeight = childWidth;
             }
+            int startLeft = workspaceLeft + (i * childWidth) + (i * gap);
 
             child.measure(makeMeasureSpec(childWidth, EXACTLY), makeMeasureSpec(childHeight, EXACTLY));
             child.layout(startLeft, workspaceTop, startLeft + childWidth, workspaceTop + childHeight);

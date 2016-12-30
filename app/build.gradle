@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'groovyx.android'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -26,4 +26,11 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.0.1'
     testCompile 'junit:junit:4.12'
+    //Testing
+    testCompile 'org.easytesting:fest:1.0.16'
+    testCompile 'org.codehaus.groovy:groovy:2.4.3:grooid'
+    testCompile 'org.robospock:robospock:0.8.0'
+    testCompile 'org.robolectric:shadows-support-v4:3.0'
+    testCompile 'cglib:cglib-nodep:3.1'
+    testCompile 'org.mockito:mockito-all:1.9.5'
 }
