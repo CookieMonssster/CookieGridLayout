@@ -1,10 +1,13 @@
 package com.binarapps.cookiegridlayout.layout;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.binarapps.cookiegridlayout.R;
 
 import static android.view.View.MeasureSpec.EXACTLY;
 import static android.view.View.MeasureSpec.makeMeasureSpec;
@@ -15,6 +18,11 @@ import static android.view.View.MeasureSpec.makeMeasureSpec;
 
 public class CookieGridLayout extends ViewGroup {
 
+    private boolean square;
+    private float gapPercent;
+    private float outsideGapPercent;
+    private int columns;
+
 
     public CookieGridLayout(Context context) {
         super(context);
@@ -22,11 +30,14 @@ public class CookieGridLayout extends ViewGroup {
 
     public CookieGridLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        readAttributes(context, attrs);
     }
 
     public CookieGridLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        readAttributes(context, attrs);
     }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -36,10 +47,6 @@ public class CookieGridLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean b, int left, int top, int right, int bottom) {
         final int count = getChildCount();
-
-        final boolean square = false;
-        final float gapPercent = 0.02f;
-        final int columns = 3;
 
         int horizontalGapCount = columns - 1;
         int currentRow = 0;
@@ -96,5 +103,18 @@ public class CookieGridLayout extends ViewGroup {
 
     private boolean isNewRow(int i, int columns) {
         return (i + 1) % columns == 0;
+    }
+
+    private void readAttributes(Context context, AttributeSet attrs) {
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CookieGridLayout, 0, 0);
+
+        try {
+            square = a.getBoolean(R.styleable.CookieGridLayout_square, true);
+            gapPercent = a.getFloat(R.styleable.CookieGridLayout_gap, 0.01f);
+            outsideGapPercent = a.getFloat(R.styleable.CookieGridLayout_outsideGap, 0.01f);
+            columns = a.getInteger(R.styleable.CookieGridLayout_columns, 3);
+        } finally {
+            a.recycle();
+        }
     }
 }
