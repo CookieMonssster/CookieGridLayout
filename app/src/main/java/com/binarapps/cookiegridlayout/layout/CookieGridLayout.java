@@ -14,6 +14,8 @@ import static android.view.View.MeasureSpec.makeMeasureSpec;
  */
 
 public class CookieGridLayout extends ViewGroup {
+
+
     public CookieGridLayout(Context context) {
         super(context);
     }
@@ -29,29 +31,19 @@ public class CookieGridLayout extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        int count = getChildCount();
-
-        Log.d("klop", "klop");
-
-        for(int i = 0; i < count; i++) {
-            View child= getChildAt(i);
-
-            child.getLayoutParams().width = 500;
-            child.getLayoutParams().height = 500;
-        }
-
-
-
-
     }
 
     @Override
     protected void onLayout(boolean b, int left, int top, int right, int bottom) {
         final int count = getChildCount();
-        final int gapCount = count - 1;
 
         final boolean square = true;
         final float gapPercent = 0.05f;
+        final int columns = 3;
+
+        int gapCount = columns - 1;
+        int currentRow = 0;
+        int currentColumn = 0;
 
         int workspaceLeft = getPaddingLeft();
         int workspaceRight = right - left - getPaddingRight();
@@ -63,20 +55,33 @@ public class CookieGridLayout extends ViewGroup {
 
         int gap = Math.round(gapPercent * width);
 
-        int childWidth = (width - (gapCount * gap)) / count;
+        int childWidth = (width - (gapCount * gap)) / columns;
+        int childHeight;
+        if(square) {
+            childHeight = childWidth;
+        } else {
+            childHeight = 100;
+        }
+
+
 
         for(int i = 0; i < count; i++) {
             final View child = getChildAt(i);
-            int childHeight = child.getHeight();
-            if(square) {
-                childHeight = childWidth;
-            }
-            int startLeft = workspaceLeft + (i * childWidth) + (i * gap);
+
+            int startLeft = workspaceLeft + (currentColumn * childWidth) + (currentColumn * gap);
+            int startTop = workspaceTop + (currentRow * childHeight) + (currentRow * gap);
+            startTop  = startTop + 100;
+
 
             child.measure(makeMeasureSpec(childWidth, EXACTLY), makeMeasureSpec(childHeight, EXACTLY));
-            child.layout(startLeft, workspaceTop, startLeft + childWidth, workspaceTop + childHeight);
+            child.layout(startLeft, startTop, startLeft + childWidth, workspaceTop + childHeight);
 
-            child.invalidate();
+            if((i + 1)%columns == 0) {
+                currentRow = currentRow + 1;
+                currentColumn = 0;
+            } else {
+                currentColumn = currentColumn + 1;
+            }
         }
     }
 }
