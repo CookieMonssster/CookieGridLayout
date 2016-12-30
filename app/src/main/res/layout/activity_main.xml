@@ -4,12 +4,14 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.binarapps.cookiegridlayout.MainActivity">
+    tools:context="com.binarapps.cookiegridlayout.MainActivity"
+    android:background="@android:color/darker_gray">
 
     <com.binarapps.cookiegridlayout.layout.CookieGridLayout
         android:id="@+id/cookie"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
         <Button
             android:layout_width="0dp"
@@ -35,6 +37,22 @@
             android:gravity="center"
             android:text="kloppo"/>
 
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:text="kloppo"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:text="kloppo"/>
 
         <Button
             android:layout_width="0dp"

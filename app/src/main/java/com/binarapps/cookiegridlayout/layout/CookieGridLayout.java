@@ -37,11 +37,11 @@ public class CookieGridLayout extends ViewGroup {
     protected void onLayout(boolean b, int left, int top, int right, int bottom) {
         final int count = getChildCount();
 
-        final boolean square = true;
-        final float gapPercent = 0.05f;
+        final boolean square = false;
+        final float gapPercent = 0.02f;
         final int columns = 3;
 
-        int gapCount = columns - 1;
+        int horizontalGapCount = columns - 1;
         int currentRow = 0;
         int currentColumn = 0;
 
@@ -55,12 +55,17 @@ public class CookieGridLayout extends ViewGroup {
 
         int gap = Math.round(gapPercent * width);
 
-        int childWidth = (width - (gapCount * gap)) / columns;
+        int childWidth = (width - (horizontalGapCount * gap)) / columns;
         int childHeight;
         if(square) {
             childHeight = childWidth;
         } else {
-            childHeight = 100;
+            int rows = count / columns;
+            if(count % columns > 0) {
+                rows = rows + 1;
+            }
+            int verticalGapCount = rows - 1;
+            childHeight = (height - (verticalGapCount * gap)) / rows;
         }
 
 
@@ -70,18 +75,26 @@ public class CookieGridLayout extends ViewGroup {
 
             int startLeft = workspaceLeft + (currentColumn * childWidth) + (currentColumn * gap);
             int startTop = workspaceTop + (currentRow * childHeight) + (currentRow * gap);
-            startTop  = startTop + 100;
 
 
             child.measure(makeMeasureSpec(childWidth, EXACTLY), makeMeasureSpec(childHeight, EXACTLY));
-            child.layout(startLeft, startTop, startLeft + childWidth, workspaceTop + childHeight);
 
-            if((i + 1)%columns == 0) {
+            if(isNewRow(i, columns)) {
+                child.layout(startLeft, startTop, startLeft + (workspaceRight - startLeft), startTop + childHeight);
+            } else {
+                child.layout(startLeft, startTop, startLeft + childWidth, startTop + childHeight);
+            }
+
+            if(isNewRow(i, columns)) {
                 currentRow = currentRow + 1;
                 currentColumn = 0;
             } else {
                 currentColumn = currentColumn + 1;
             }
         }
+    }
+
+    private boolean isNewRow(int i, int columns) {
+        return (i + 1) % columns == 0;
     }
 }
