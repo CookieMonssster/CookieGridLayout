@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -48,13 +49,23 @@ public class CookieGridLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        rows = getRowsCount(getChildCount());
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
+
+            int childSpanColumns = lp.spanColumns;
+            int childSpanRows = lp.spanRows;
+
+            availableSpace.addNewElement(childSpanColumns, childSpanRows);
+        }
+
         int heightSize;
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
         int size = widthSize / columns;
-        heightSize = size * rows;
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.AT_MOST);
+        heightSize = size * availableSpace.getRowsCount();
+        Log.d("TAG", "rows:" + availableSpace.getRowsCount());
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
@@ -85,7 +96,8 @@ public class CookieGridLayout extends ViewGroup {
             int childSpanColumns = lp.spanColumns;
             int childSpanRows = lp.spanRows;
 
-            Point drawPoint = availableSpace.addNewElement(childSpanColumns, childSpanRows);
+            Point drawPoint = availableSpace.getPosition(i);
+
 
             int startLeft = workspaceLeft + (drawPoint.x * childSize) + (drawPoint.x * gap);
             int startTop = workspaceTop + (drawPoint.y * childSize) + (drawPoint.y * gap);
@@ -106,20 +118,10 @@ public class CookieGridLayout extends ViewGroup {
                 currentColumn = currentColumn + 1;
             }
         }
-//        int height = availableSpace.getRowsCount() * childSize;
-//        this.measure(makeMeasureSpec(width, MeasureSpec.AT_MOST), makeMeasureSpec(height, MeasureSpec.AT_MOST));
     }
 
     private boolean isNewRow(int i, int columns) {
         return (i + 1) % columns == 0;
-    }
-
-    private int getRowsCount(int count) {
-        int rows = count / columns;
-        if (count % columns > 0) {
-            rows = rows + 1;
-        }
-        return rows;
     }
 
     private void readAttributes(Context context, AttributeSet attrs) {

@@ -16,10 +16,12 @@ public class TwoDimMatrix {
 
     private int columns;
     private List<boolean[]> list;
+    private List<Point> coordinates;
 
     public TwoDimMatrix(int columns) {
         this.columns = columns;
         list = new ArrayList<>();
+        coordinates = new ArrayList<>();
         addNewRow();
     }
 
@@ -31,6 +33,9 @@ public class TwoDimMatrix {
         return list.size();
     }
 
+    public Point getPosition(int i) {
+        return coordinates.get(i);
+    }
 
 
     public Point addNewElement(int spanColumns, int spanRows) {
@@ -43,10 +48,11 @@ public class TwoDimMatrix {
                 if (i + spanColumns <= row.length) {
                     for (int j = 0; j < spanColumns; j++) {
                         if (row[i + j]) {
-                            break;
+                            continue;
                         } else if (j == spanColumns - 1 && placesBelowAreAvailable(k, i, spanColumns, spanRows)) {
                             Log.d("klop", "Instert new element: " + k + ":" + i);
                             bookPlaces(k, i, spanColumns, spanRows);
+                            coordinates.add(new Point(i, k));
                             return new Point(i, k);
                         }
                     }
@@ -54,6 +60,7 @@ public class TwoDimMatrix {
             }
             k++;
             if (k >= list.size()) {
+                Log.d("klopp", "Add new row, i:" + k);
                 addNewRow();
             }
         }
@@ -69,20 +76,27 @@ public class TwoDimMatrix {
     }
 
     private boolean placesBelowAreAvailable(int rowPosition, int columnPosition, int spanColumns, int spanRows) {
+        Log.d("klopp", "Row positioon: " + rowPosition);
+        boolean[] row;
+        int count = 0;
         for (int i = rowPosition; i < rowPosition + spanRows; i++) {
             if (i >= list.size()) {
-                addNewRow();
+
+                row = new boolean[columns];
+                count ++;
             } else {
-                boolean[] row = list.get(i);
-                for (int j = columnPosition; j < spanColumns + columnPosition; j++) {
-                    if (row[j]) {
-                        return false;
-                    }
+                row = list.get(i);
+            }
+            for (int j = columnPosition; j < spanColumns + columnPosition; j++) {
+                if (row[j]) {
+                    return false;
                 }
             }
         }
+        for(int i =0; i<count;i++ ){
+            addNewRow();
+            Log.d("klopp", "Add new row form below, i:" + i + ":" + list.size());
+        }
         return true;
     }
-
-
 }
