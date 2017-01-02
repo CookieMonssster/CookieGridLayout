@@ -2,12 +2,13 @@ package com.binarapps.cookiegridlayout.layout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.annimon.stream.Stream;
 import com.binarapps.cookiegridlayout.R;
+import com.binarapps.cookiegridlayout.layout.utils.TwoDimMatrix;
 
 import static android.view.View.MeasureSpec.EXACTLY;
 import static android.view.View.MeasureSpec.makeMeasureSpec;
@@ -18,12 +19,12 @@ import static android.view.View.MeasureSpec.makeMeasureSpec;
 
 public class CookieGridLayout extends ViewGroup {
 
-    private boolean square;
     private int columns;
     private int rows;
     private float gapPercent;
     private float outsideGapPercent;
-    private float heigthMultiple;
+    private float heightMultiple;
+    private TwoDimMatrix availableSpace;
 
 
     public CookieGridLayout(Context context) {
@@ -32,27 +33,28 @@ public class CookieGridLayout extends ViewGroup {
 
     public CookieGridLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        readAttributes(context, attrs);
+        initialize(context, attrs);
     }
 
     public CookieGridLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initialize(context, attrs);
+    }
+
+    private void initialize(Context context, AttributeSet attrs) {
         readAttributes(context, attrs);
+        availableSpace = new TwoDimMatrix(columns);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         rows = getRowsCount(getChildCount());
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        int heightSize;
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
-        if(square) {
-            int size = widthSize / columns;
-            heightSize = size * rows;
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.AT_MOST);
-        } else {
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(Math.round(heightSize * heigthMultiple), MeasureSpec.AT_MOST);
-        }
+        int size = widthSize / columns;
+        heightSize = size * rows;
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.AT_MOST);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
@@ -70,47 +72,42 @@ public class CookieGridLayout extends ViewGroup {
         int workspaceBottom = bottom - top - getPaddingBottom();
 
         int width = workspaceRight - workspaceLeft;
-        int height = workspaceBottom - workspaceTop;
 
         int gap = Math.round(gapPercent * width);
 
-        int childWidth = (width - (horizontalGapCount * gap)) / columns;
-        int childHeight;
-        if(square) {
-            childHeight = childWidth;
-        } else {
-            int verticalGapCount = rows - 1;
-            childHeight = (height - (verticalGapCount * gap)) / rows;
-        }
+        int childSize = (width - (horizontalGapCount * gap)) / columns;
 
 
-
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
 
             int childSpanColumns = lp.spanColumns;
             int childSpanRows = lp.spanRows;
 
-            int startLeft = workspaceLeft + (currentColumn * childWidth) + (currentColumn * gap);
-            int startTop = workspaceTop + (currentRow * childHeight) + (currentRow * gap);
+            Point drawPoint = availableSpace.addNewElement(childSpanColumns, childSpanRows);
 
+            int startLeft = workspaceLeft + (drawPoint.x * childSize) + (drawPoint.x * gap);
+            int startTop = workspaceTop + (drawPoint.y * childSize) + (drawPoint.y * gap);
 
-            child.measure(makeMeasureSpec(childWidth, EXACTLY), makeMeasureSpec(childHeight, EXACTLY));
+            child.measure(makeMeasureSpec(childSize * childSpanColumns, EXACTLY), makeMeasureSpec(childSize * childSpanRows, EXACTLY));
 
-            if(isNewRow(i, columns)) {
-                child.layout(startLeft, startTop, startLeft + (workspaceRight - startLeft), startTop + childHeight);
-            } else {
-                child.layout(startLeft, startTop, startLeft + childWidth, startTop + childHeight);
-            }
+//            if(isNewRow(i, columns)) {
+//                child.layout(startLeft, startTop, startLeft + (workspaceRight - startLeft), startTop + childHeight);
+//            } else {
+            child.layout(startLeft, startTop, startLeft + childSize * childSpanColumns + gap * (childSpanColumns - 1),
+                    startTop + childSize * childSpanRows + gap * (childSpanRows - 1));
+//            }
 
-            if(isNewRow(i, columns)) {
+            if (isNewRow(i, columns)) {
                 currentRow = currentRow + 1;
                 currentColumn = 0;
             } else {
                 currentColumn = currentColumn + 1;
             }
         }
+//        int height = availableSpace.getRowsCount() * childSize;
+//        this.measure(makeMeasureSpec(width, MeasureSpec.AT_MOST), makeMeasureSpec(height, MeasureSpec.AT_MOST));
     }
 
     private boolean isNewRow(int i, int columns) {
@@ -119,7 +116,7 @@ public class CookieGridLayout extends ViewGroup {
 
     private int getRowsCount(int count) {
         int rows = count / columns;
-        if(count % columns > 0) {
+        if (count % columns > 0) {
             rows = rows + 1;
         }
         return rows;
@@ -129,31 +126,30 @@ public class CookieGridLayout extends ViewGroup {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CookieGridLayout, 0, 0);
 
         try {
-            square = a.getBoolean(R.styleable.CookieGridLayout_square, true);
             gapPercent = a.getFloat(R.styleable.CookieGridLayout_gap, 0.01f);
             outsideGapPercent = a.getFloat(R.styleable.CookieGridLayout_outsideGap, 0.01f);
             columns = a.getInteger(R.styleable.CookieGridLayout_columns, 3);
-            if(columns == 0) {
+            if (columns == 0) {
                 columns = 1;
             }
-            heigthMultiple = a.getFloat(R.styleable.CookieGridLayout_heightMultiple, 1);
+            heightMultiple = a.getFloat(R.styleable.CookieGridLayout_heightMultiple, 1);
         } finally {
             a.recycle();
         }
     }
 
-    @Override public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs)
-    {
+    @Override
+    public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new CookieGridLayout.LayoutParams(getContext(), attrs);
     }
 
-    @Override protected boolean checkLayoutParams(ViewGroup.LayoutParams p)
-    {
+    @Override
+    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
         return p instanceof CookieGridLayout.LayoutParams;
     }
 
-    @Override protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p)
-    {
+    @Override
+    protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
         return new LayoutParams(p);
     }
 

@@ -1,6 +1,5 @@
 <resources>
     <declare-styleable name="CookieGridLayout">
-        <attr name="square" format="boolean" />
         <attr name="gap" format="float" />
         <attr name="outsideGap" format="float" />
         <attr name="columns" format="integer" />
