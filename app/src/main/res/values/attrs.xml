@@ -6,4 +6,8 @@
         <attr name="columns" format="integer" />
         <attr name="heightMultiple" format="float" />
     </declare-styleable>
+    <declare-styleable name="CookieGridLayout_Layout">
+        <attr name="CookieLayout_spanColumns" format="integer" />
+        <attr name="CookieLayout_spanRows" format="integer" />
+    </declare-styleable>
 </resources>

@@ -3,11 +3,8 @@ package com.binarapps.cookiegridlayout.layout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.binarapps.cookiegridlayout.R;
 
@@ -89,6 +86,10 @@ public class CookieGridLayout extends ViewGroup {
 
         for(int i = 0; i < count; i++) {
             final View child = getChildAt(i);
+            CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
+
+            int childSpanColumns = lp.spanColumns;
+            int childSpanRows = lp.spanRows;
 
             int startLeft = workspaceLeft + (currentColumn * childWidth) + (currentColumn * gap);
             int startTop = workspaceTop + (currentRow * childHeight) + (currentRow * gap);
@@ -138,5 +139,45 @@ public class CookieGridLayout extends ViewGroup {
         } finally {
             a.recycle();
         }
+    }
+
+    @Override public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs)
+    {
+        return new CookieGridLayout.LayoutParams(getContext(), attrs);
+    }
+
+    @Override protected boolean checkLayoutParams(ViewGroup.LayoutParams p)
+    {
+        return p instanceof CookieGridLayout.LayoutParams;
+    }
+
+    @Override protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p)
+    {
+        return new LayoutParams(p);
+    }
+
+    private static class LayoutParams extends ViewGroup.LayoutParams {
+
+        public int spanColumns;
+        public int spanRows;
+
+        public LayoutParams(Context c, AttributeSet attrs) {
+            super(c, attrs);
+
+            TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.CookieGridLayout_Layout);
+            spanColumns = a.getInt(R.styleable.CookieGridLayout_Layout_CookieLayout_spanColumns, 1);
+            spanRows = a.getInt(R.styleable.CookieGridLayout_Layout_CookieLayout_spanRows, 1);
+            a.recycle();
+        }
+
+        public LayoutParams(int width, int height) {
+            super(width, height);
+        }
+
+        public LayoutParams(ViewGroup.LayoutParams source) {
+            super(source);
+        }
+
+
     }
 }
