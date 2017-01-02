@@ -44,21 +44,23 @@ public class CookieGridLayout extends ViewGroup {
 
     private void initialize(Context context, AttributeSet attrs) {
         readAttributes(context, attrs);
-        availableSpace = new TwoDimMatrix(columns);
+
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
+        if(availableSpace==null) {
+            availableSpace = new TwoDimMatrix(columns);
+            for (int i = 0; i < getChildCount(); i++) {
+                final View child = getChildAt(i);
+                CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
 
-            int childSpanColumns = lp.spanColumns;
-            int childSpanRows = lp.spanRows;
+                int childSpanColumns = lp.spanColumns;
+                int childSpanRows = lp.spanRows;
 
-            availableSpace.addNewElement(childSpanColumns, childSpanRows);
+                availableSpace.addNewElement(childSpanColumns, childSpanRows);
+            }
         }
-
         int heightSize;
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
@@ -95,30 +97,32 @@ public class CookieGridLayout extends ViewGroup {
 
             int childSpanColumns = lp.spanColumns;
             int childSpanRows = lp.spanRows;
+            if(availableSpace!=null) {
+                Point drawPoint = availableSpace.getPosition(i);
 
-            Point drawPoint = availableSpace.getPosition(i);
 
+                int startLeft = workspaceLeft + (drawPoint.x * childSize) + (drawPoint.x * gap);
+                int startTop = workspaceTop + (drawPoint.y * childSize) + (drawPoint.y * gap);
 
-            int startLeft = workspaceLeft + (drawPoint.x * childSize) + (drawPoint.x * gap);
-            int startTop = workspaceTop + (drawPoint.y * childSize) + (drawPoint.y * gap);
+                child.measure(makeMeasureSpec(childSize * childSpanColumns, EXACTLY), makeMeasureSpec(childSize * childSpanRows, EXACTLY));
 
-            child.measure(makeMeasureSpec(childSize * childSpanColumns, EXACTLY), makeMeasureSpec(childSize * childSpanRows, EXACTLY));
+                //            if(isNewRow(i, columns)) {
+                //                child.layout(startLeft, startTop, startLeft + (workspaceRight - startLeft), startTop + childHeight);
+                //            } else {
+                child.layout(startLeft, startTop, startLeft + childSize * childSpanColumns + gap * (childSpanColumns - 1),
+                  startTop + childSize * childSpanRows + gap * (childSpanRows - 1));
+                //            }
 
-//            if(isNewRow(i, columns)) {
-//                child.layout(startLeft, startTop, startLeft + (workspaceRight - startLeft), startTop + childHeight);
-//            } else {
-            child.layout(startLeft, startTop, startLeft + childSize * childSpanColumns + gap * (childSpanColumns - 1),
-                    startTop + childSize * childSpanRows + gap * (childSpanRows - 1));
-//            }
-
-            if (isNewRow(i, columns)) {
-                currentRow = currentRow + 1;
-                currentColumn = 0;
-            } else {
-                currentColumn = currentColumn + 1;
+                if (isNewRow(i, columns)) {
+                    currentRow = currentRow + 1;
+                    currentColumn = 0;
+                } else {
+                    currentColumn = currentColumn + 1;
+                }
             }
         }
     }
+
 
     private boolean isNewRow(int i, int columns) {
         return (i + 1) % columns == 0;
