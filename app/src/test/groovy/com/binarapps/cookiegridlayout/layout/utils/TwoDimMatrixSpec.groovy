@@ -56,4 +56,46 @@ public class TwoDimMatrixSpec extends RoboSpecification {
         rows == 6
     }
 
+    def reset() {
+        given:
+        twoDimMatrix = new TwoDimMatrix(5)
+    }
+
+    def "Adding new element to the layout 2"() {
+        when:
+        def point = twoDimMatrix.addNewElement(spanColumns, spanRows)
+        then:
+        x == point.x
+        y == point.y
+        where:
+        spanColumns | spanRows || x | y
+        3           | 3        || 0 | 0
+        1           | 1        || 3 | 0
+        1           | 1        || 4 | 0
+        1           | 1        || 3 | 1
+        4           | 2        || 0 | 3
+    }
+
+    def "check if places Below Are Available 2"() {
+        when:
+        def value = twoDimMatrix.placesBelowAreAvailable(rowPosition, columnPosition, spanColumns, spanRows)
+        then:
+        expectedResult == value
+        where:
+        rowPosition | columnPosition | spanColumns | spanRows || expectedResult
+        0           | 1              | 3           | 3        || false
+        0           | 3              | 3           | 2        || false
+        3           | 3              | 1           | 1        || false
+        4           | 3              | 1           | 1        || false
+        3           | 3              | 1           | 2        || false
+        1           | 4              | 1           | 2        || true
+        2           | 3              | 2           | 1        || true
+    }
+
+    def "check rows count 2"() {
+        when:
+        def rows = twoDimMatrix.getRowsCount()
+        then:
+        rows == 5
+    }
 }

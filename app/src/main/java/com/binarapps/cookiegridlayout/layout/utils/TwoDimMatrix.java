@@ -77,9 +77,10 @@ public class TwoDimMatrix {
   }
 
   private boolean placesBelowAreAvailable(int rowPosition, int columnPosition, int spanColumns, int spanRows) {
+    int count = 0;
 
     boolean[] row;
-    int count = 0;
+
     for (int i = rowPosition; i < rowPosition + spanRows; i++) {
       if (i >= list.size()) {
 
