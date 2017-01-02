@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.annimon.stream.Stream;
 import com.binarapps.cookiegridlayout.R;
 
 import static android.view.View.MeasureSpec.EXACTLY;

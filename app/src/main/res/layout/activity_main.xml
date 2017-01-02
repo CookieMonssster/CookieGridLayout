@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        cookie:square="true"
+        cookie:square="false"
         cookie:gap="0.01"
         cookie:columns="4"
         cookie:outsideGap="0"
