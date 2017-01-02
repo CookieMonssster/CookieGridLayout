@@ -4,7 +4,6 @@ import com.binarapps.cookiegridlayout.BuildConfig
 import org.robolectric.annotation.Config
 import pl.polidea.robospock.RoboSpecification
 import spock.lang.Shared
-import spock.lang.Unroll
 
 /**
  * Created by martacabaj on 29/12/16.
@@ -19,7 +18,7 @@ public class TwoDimMatrixSpec extends RoboSpecification {
         twoDimMatrix = new TwoDimMatrix(4);
     }
 
-    @Unroll
+
     def "Adding new element to the layout"() {
         when:
         def point = twoDimMatrix.addNewElement(spanColumns, spanRows)
@@ -35,5 +34,26 @@ public class TwoDimMatrixSpec extends RoboSpecification {
         2           | 1        || 0 | 5
     }
 
+    def "check if places Below Are Available"() {
+        when:
+        def value = twoDimMatrix.placesBelowAreAvailable(rowPosition, columnPosition, spanColumns, spanRows)
+        then:
+        expectedResult == value
+        where:
+        rowPosition | columnPosition | spanColumns | spanRows || expectedResult
+        0           | 1              | 3           | 3        || false
+        0           | 3              | 3           | 2        || false
+        3           | 3              | 1           | 1        || true
+        4           | 3              | 1           | 1        || true
+        3           | 3              | 1           | 2        || true
+
+    }
+
+    def "check rows count"() {
+        when:
+        def rows = twoDimMatrix.getRowsCount()
+        then:
+        rows == 6
+    }
 
 }

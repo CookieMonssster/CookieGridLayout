@@ -12,91 +12,92 @@ import java.util.List;
 
 public class TwoDimMatrix {
 
-    private static final String TAG = TwoDimMatrix.class.getSimpleName();
+  private static final String TAG = TwoDimMatrix.class.getSimpleName();
 
-    private int columns;
-    private List<boolean[]> list;
-    private List<Point> coordinates;
+  private int columns;
+  private List<boolean[]> list;
+  private List<Point> coordinates;
 
-    public TwoDimMatrix(int columns) {
-        this.columns = columns;
-        list = new ArrayList<>();
-        coordinates = new ArrayList<>();
+  public TwoDimMatrix(int columns) {
+    this.columns = columns;
+    list = new ArrayList<>();
+    coordinates = new ArrayList<>();
+    addNewRow();
+  }
+
+  private void addNewRow() {
+    list.add(new boolean[columns]);
+  }
+
+  public int getRowsCount() {
+    return list.size();
+  }
+
+  public Point getPosition(int i) {
+    return coordinates.get(i);
+  }
+
+
+  public Point addNewElement(int spanColumns, int spanRows) {
+    if (spanColumns > columns)
+      throw new IllegalStateException("Too many columns to span!");
+    int k = 0;
+
+    while (true) {
+      boolean[] row = list.get(k);
+      for (int i = 0; i < row.length; i++) {
+        if (i + spanColumns <= row.length) {
+          for (int j = 0; j < spanColumns; j++) {
+            if (row[i + j]) {
+              continue;
+            } else if (j == spanColumns - 1 && placesBelowAreAvailable(k, i, spanColumns, spanRows)) {
+              Log.d("klop", "Instert new element: " + k + ":" + i);
+              bookPlaces(k, i, spanColumns, spanRows);
+              coordinates.add(new Point(i, k));
+              return new Point(i, k);
+            }
+          }
+        }
+      }
+      k++;
+      if (k >= list.size()) {
+        Log.d("klopp", "Add new row, i:" + k);
         addNewRow();
+      }
     }
+  }
 
-    private void addNewRow() {
-        list.add(new boolean[columns]);
+  private void bookPlaces(int rowPosition, int columnPosition, int spanColumns, int spanRows) {
+    for (int i = rowPosition; i < rowPosition + spanRows; i++) {
+      boolean[] row = list.get(i);
+      for (int j = columnPosition; j < spanColumns + columnPosition; j++) {
+        row[j] = true;
+      }
     }
+  }
 
-    public int getRowsCount() {
-        return list.size();
-    }
+  private boolean placesBelowAreAvailable(int rowPosition, int columnPosition, int spanColumns, int spanRows) {
 
-    public Point getPosition(int i) {
-        return coordinates.get(i);
-    }
+    boolean[] row;
+    int count = 0;
+    for (int i = rowPosition; i < rowPosition + spanRows; i++) {
+      if (i >= list.size()) {
 
-
-    public Point addNewElement(int spanColumns, int spanRows) {
-        if (spanColumns > columns) throw new IllegalStateException("Too many columns to span!");
-        int k = 0;
-
-        while (true) {
-            boolean[] row = list.get(k);
-            for (int i = 0; i < row.length; i++) {
-                if (i + spanColumns <= row.length) {
-                    for (int j = 0; j < spanColumns; j++) {
-                        if (row[i + j]) {
-                            continue;
-                        } else if (j == spanColumns - 1 && placesBelowAreAvailable(k, i, spanColumns, spanRows)) {
-                            Log.d("klop", "Instert new element: " + k + ":" + i);
-                            bookPlaces(k, i, spanColumns, spanRows);
-                            coordinates.add(new Point(i, k));
-                            return new Point(i, k);
-                        }
-                    }
-                }
-            }
-            k++;
-            if (k >= list.size()) {
-                Log.d("klopp", "Add new row, i:" + k);
-                addNewRow();
-            }
+        row = new boolean[columns];
+        count++;
+      } else {
+        row = list.get(i);
+      }
+      for (int j = columnPosition; j < spanColumns + columnPosition; j++) {
+        if (row[j]) {
+          return false;
         }
+      }
     }
+    for (int i = 0; i < count; i++) {
+      addNewRow();
 
-    private void bookPlaces(int rowPosition, int columnPosition, int spanColumns, int spanRows) {
-        for (int i = rowPosition; i < rowPosition + spanRows; i++) {
-            boolean[] row = list.get(i);
-            for (int j = columnPosition; j < spanColumns + columnPosition; j++) {
-                row[j] = true;
-            }
-        }
     }
-
-    private boolean placesBelowAreAvailable(int rowPosition, int columnPosition, int spanColumns, int spanRows) {
-        Log.d("klopp", "Row positioon: " + rowPosition);
-        boolean[] row;
-        int count = 0;
-        for (int i = rowPosition; i < rowPosition + spanRows; i++) {
-            if (i >= list.size()) {
-
-                row = new boolean[columns];
-                count ++;
-            } else {
-                row = list.get(i);
-            }
-            for (int j = columnPosition; j < spanColumns + columnPosition; j++) {
-                if (row[j]) {
-                    return false;
-                }
-            }
-        }
-        for(int i =0; i<count;i++ ){
-            addNewRow();
-            Log.d("klopp", "Add new row form below, i:" + i + ":" + list.size());
-        }
-        return true;
-    }
+    return true;
+  }
 }
