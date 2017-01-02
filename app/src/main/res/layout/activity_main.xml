@@ -1,53 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:cookie="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.binarapps.cookiegridlayout.MainActivity"
-    android:background="@android:color/darker_gray">
+    android:background="@android:color/darker_gray"
+    tools:context="com.binarapps.cookiegridlayout.MainActivity">
 
     <com.binarapps.cookiegridlayout.layout.CookieGridLayout
         android:id="@+id/cookie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        cookie:gap="0.01"
         cookie:columns="4"
-        cookie:outsideGap="0"
+        cookie:gap="0.01"
         cookie:heightMultiple="1"
-        >
+        cookie:outsideGap="0">
 
         <Button
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/colorPrimaryDark"
-            android:textColor="@android:color/white"
             android:gravity="center"
             android:text="kloppo 1"
-            cookie:CookieLayout_spanColumns="3"
-            cookie:CookieLayout_spanRows="2"
-            />
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="1"
+            cookie:CookieLayout_spanRows="1" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
             android:gravity="center"
-            cookie:CookieLayout_spanRows="3"
-            android:text="kloppo 2"/>
+            android:text="kloppo 2"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="3"
+            cookie:CookieLayout_spanRows="3" />
 
         <Button
-          android:layout_width="0dp"
-          android:layout_height="0dp"
-          android:background="@color/colorPrimary"
-          android:textColor="@android:color/white"
-          android:gravity="center"
-          cookie:CookieLayout_spanRows="1"
-          android:text="kloppo 3"/>
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="kloppo 3"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="1"
+            cookie:CookieLayout_spanRows="2" />
 
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="kloppo 4"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="3"
+            cookie:CookieLayout_spanRows="2" />
+
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="kloppo 5"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="1" />
 
 
     </com.binarapps.cookiegridlayout.layout.CookieGridLayout>
