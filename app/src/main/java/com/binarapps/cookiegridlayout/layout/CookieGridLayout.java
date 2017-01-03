@@ -25,8 +25,9 @@ public class CookieGridLayout extends ViewGroup {
     private int rows;
     private float gapPercent;
     private float outsideGapPercent;
-    private float heightMultiple;
     private TwoDimMatrix availableSpace;
+
+    private CookieGridLayoutDimensions cookieDim;
 
 
     public CookieGridLayout(Context context) {
@@ -45,6 +46,9 @@ public class CookieGridLayout extends ViewGroup {
 
     private void initialize(Context context, AttributeSet attrs) {
         readAttributes(context, attrs);
+        cookieDim = new CookieGridLayoutDimensions.Builder(columns)
+                .withGapPercent(gapPercent)
+                .build();
 
     }
 
@@ -74,14 +78,10 @@ public class CookieGridLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean b, int left, int top, int right, int bottom) {
+        cookieDim.updatePadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom());
+        cookieDim.updateDimensions(getChildCount(), left, top, right, bottom);
 
-        CookieGridLayoutDimensions cookieDim = new CookieGridLayoutDimensions.Builder(getChildCount(), left, top, right, bottom)
-                .withPadding(getPaddingTop(), getPaddingLeft(), getPaddingRight(), getPaddingBottom())
-                .withColumns(columns)
-                .withGapPercent(gapPercent)
-                .build();
-
-        for (int i = 0; i < cookieDim.count; i++) {
+        for (int i = 0; i < cookieDim.getCount(); i++) {
             final View child = getChildAt(i);
             CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
 
@@ -93,21 +93,15 @@ public class CookieGridLayout extends ViewGroup {
                 int childWidth = cookieDim.calculateWidth(startLeft, lp.spanColumns);
                 int childHeight = cookieDim.calculateHeight(startTop, lp.spanRows);
 
-                child.measure(makeMeasureSpec(cookieDim.childSize * lp.spanColumns, EXACTLY),
-                        makeMeasureSpec(cookieDim.childSize * lp.spanRows, EXACTLY));
+                child.measure(makeMeasureSpec(cookieDim.getChildSize() * lp.spanColumns, EXACTLY),
+                        makeMeasureSpec(cookieDim.getChildSize() * lp.spanRows, EXACTLY));
 
                 //            if(isNewRow(i, columns)) {
                 //                child.layout(startLeft, startTop, startLeft + (workspaceRight - startLeft), startTop + childHeight);
                 //            } else {
                 child.layout(startLeft, startTop, childWidth, childHeight);
                 //            }
-
-                if (cookieDim.isNewRow(i)) {
-                    cookieDim.currentRow = cookieDim.currentRow + 1;
-                    cookieDim.currentColumn = 0;
-                } else {
-                    cookieDim.currentColumn = cookieDim.currentColumn + 1;
-                }
+                cookieDim.checkThatIsNewRow(i);
             }
         }
     }
@@ -122,7 +116,6 @@ public class CookieGridLayout extends ViewGroup {
             if (columns == 0) {
                 columns = 1;
             }
-            heightMultiple = a.getFloat(R.styleable.CookieGridLayout_heightMultiple, 1);
         } finally {
             a.recycle();
         }

@@ -3,7 +3,6 @@
         <attr name="gap" format="float" />
         <attr name="outsideGap" format="float" />
         <attr name="columns" format="integer" />
-        <attr name="heightMultiple" format="float" />
     </declare-styleable>
     <declare-styleable name="CookieGridLayout_Layout">
         <attr name="CookieLayout_spanColumns" format="integer" />

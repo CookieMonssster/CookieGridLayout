@@ -8,36 +8,59 @@ import android.graphics.Point;
 
 public class CookieGridLayoutDimensions {
 
-    public int left, top, right, bottom;
-    public int workspaceTop, workspaceLeft, workspaceRight, workspaceBottom;
-    public int width;
-    public float gapPercent;
-    public int gap;
-    public int childSize;
-    public int count;
+    private int left, top, right, bottom;
+    private int workspaceTop, workspaceLeft, workspaceRight, workspaceBottom;
+    private int paddingLeft, paddingRight, paddingTop, paddingBottom;
+    private int width;
+    private float gapPercent;
+    private int gap;
+    private int childSize;
+    private int count;
 
-    public int columns = 1;
-    public int horizontalGapCount;
+    private int columns = 1;
+    private int horizontalGapCount;
     public int currentRow = 0;
     public int currentColumn = 0;
 
 
     public CookieGridLayoutDimensions(Builder builder) {
-        this.left = builder.left;
-        this.top = builder.top;
-        this.right = builder.right;
-        this.bottom = builder.bottom;
-        this.count = builder.count;
+        this.gapPercent = builder.gapPercent;
+        this.columns = builder.columns;
+    }
 
-        this.workspaceLeft = builder.paddingLeft;
-        this.workspaceTop = builder.paddingTop;
-        this.workspaceRight = right - left - builder.paddingRight;
-        this.workspaceBottom = bottom - top - builder.paddingBottom;
+    public void setGapPercent(int gapPercent) {
+        this.gapPercent = gapPercent;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public int getChildSize() {
+        return childSize;
+    }
+
+    public void updatePadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.paddingLeft = paddingLeft;
+        this.paddingTop = paddingTop;
+        this.paddingRight = paddingRight;
+        this.paddingBottom = paddingBottom;
+    }
+
+    public void updateDimensions(int count, int left, int top, int right, int bottom) {
+        this.count = count;
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
+
+        this.workspaceLeft = paddingLeft;
+        this.workspaceTop = paddingTop;
+        this.workspaceRight = right - left - paddingRight;
+        this.workspaceBottom = bottom - top - paddingBottom;
 
         this.width = workspaceRight - workspaceLeft;
-        this.gapPercent = builder.gapPercent;
         this.gap = Math.round(gapPercent * width);
-        this.columns = builder.columns;
 
         horizontalGapCount = columns - 1;
         childSize = (width - (horizontalGapCount * gap)) / columns;
@@ -63,33 +86,21 @@ public class CookieGridLayoutDimensions {
         return startTop + childSize * spanRows + gap * (spanRows - 1);
     }
 
-    public static class Builder {
+    public void checkThatIsNewRow(int i) {
+        if (isNewRow(i)) {
+            currentRow = currentRow + 1;
+            currentColumn = 0;
+        } else {
+            currentColumn = currentColumn + 1;
+        }
+    }
 
-        private int left, top, right, bottom;
-        private int count;
-        private int paddingLeft, paddingRight, paddingTop, paddingBottom = 0;
+    public static class Builder {
         private int columns = 1;
         private float gapPercent = 0.05f;
 
-        public Builder(int count, int left, int top, int right, int bottom) {
-            this.left = left;
-            this.top = top;
-            this.right = right;
-            this.bottom = bottom;
-            this.count = count;
-        }
-
-        public Builder withColumns(int columns) {
+        public Builder(int columns) {
             this.columns = columns;
-            return this;
-        }
-
-        public Builder withPadding(int paddingTop, int paddingLeft, int paddingRight, int paddingBottom) {
-            this.paddingTop = paddingTop;
-            this.paddingLeft = paddingLeft;
-            this.paddingRight = paddingRight;
-            this.paddingBottom = paddingBottom;
-            return this;
         }
 
         public Builder withGapPercent(float percent) {
