@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,7 +21,7 @@ import static android.view.View.MeasureSpec.makeMeasureSpec;
 public class CookieGridLayout extends ViewGroup {
 
     private int columns;
-    private int rows;
+
     private float gapPercent;
     private float outsideGapPercent;
     private TwoDimMatrix availableSpace;
@@ -59,21 +58,21 @@ public class CookieGridLayout extends ViewGroup {
             for (int i = 0; i < getChildCount(); i++) {
                 final View child = getChildAt(i);
                 CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
-
-                int childSpanColumns = lp.spanColumns;
-                int childSpanRows = lp.spanRows;
-
-                availableSpace.addNewElement(childSpanColumns, childSpanRows);
+                availableSpace.addNewElement(lp.spanColumns, lp.spanRows);
             }
         }
+        if(getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            heightMeasureSpec = calculateViewHeight(widthMeasureSpec);
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    private int calculateViewHeight(int widthMeasureSpec){
         int heightSize;
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-
         int size = widthSize / columns;
         heightSize = size * availableSpace.getRowsCount();
-        Log.d("TAG", "rows:" + availableSpace.getRowsCount());
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.EXACTLY);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        return MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.EXACTLY);
     }
 
     @Override
