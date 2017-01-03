@@ -88,18 +88,18 @@ public class CookieGridLayout extends ViewGroup {
             if(availableSpace != null) {
                 Point drawPoint = availableSpace.getPosition(i);
 
-                int startLeft = cookieDim.calculateStartLeft(drawPoint);
-                int startTop = cookieDim.calculateStartTop(drawPoint);
-                int childWidth = cookieDim.calculateWidth(startLeft, lp.spanColumns);
-                int childHeight = cookieDim.calculateHeight(startTop, lp.spanRows);
+                int startHorizontal = cookieDim.calculateStartLeft(drawPoint);
+                int startVertical = cookieDim.calculateStartTop(drawPoint);
+                int stopHorizontal = cookieDim.calculateWidth(startHorizontal, lp.spanColumns);
+                int stopVertical = cookieDim.calculateHeight(startVertical, lp.spanRows);
 
                 child.measure(makeMeasureSpec(cookieDim.getChildSize() * lp.spanColumns, EXACTLY),
                         makeMeasureSpec(cookieDim.getChildSize() * lp.spanRows, EXACTLY));
 
                 //            if(isNewRow(i, columns)) {
-                //                child.layout(startLeft, startTop, startLeft + (workspaceRight - startLeft), startTop + childHeight);
+                //                child.layout(startHorizontal, startVertical, startHorizontal + (workspaceRight - startHorizontal), startVertical + stopVertical);
                 //            } else {
-                child.layout(startLeft, startTop, childWidth, childHeight);
+                child.layout(startHorizontal, startVertical, stopHorizontal, stopVertical);
                 //            }
                 cookieDim.checkThatIsNewRow(i);
             }

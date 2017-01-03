@@ -105,8 +105,6 @@ public class CookieGridLayoutDimensions {
         public CookieGridLayoutDimensions build() {
             return new CookieGridLayoutDimensions(this);
         }
-
-
     }
 
 }
