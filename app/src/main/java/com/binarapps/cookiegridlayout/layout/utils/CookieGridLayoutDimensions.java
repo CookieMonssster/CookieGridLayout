@@ -8,17 +8,15 @@ import android.graphics.Point;
 
 public class CookieGridLayoutDimensions {
 
-    private int left, top, right, bottom;
+
     private int workspaceTop, workspaceLeft, workspaceRight, workspaceBottom;
     private int paddingLeft, paddingRight, paddingTop, paddingBottom;
-    private int width;
     private float gapPercent;
     private int gap;
     private int childSize;
     private int count;
 
     private int columns = 1;
-    private int horizontalGapCount;
     public int currentRow = 0;
     public int currentColumn = 0;
 
@@ -49,20 +47,16 @@ public class CookieGridLayoutDimensions {
 
     public void updateDimensions(int count, int left, int top, int right, int bottom) {
         this.count = count;
-        this.left = left;
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
 
         this.workspaceLeft = paddingLeft;
         this.workspaceTop = paddingTop;
         this.workspaceRight = right - left - paddingRight;
         this.workspaceBottom = bottom - top - paddingBottom;
 
-        this.width = workspaceRight - workspaceLeft;
+        int width = workspaceRight - workspaceLeft;
         this.gap = Math.round(gapPercent * width);
 
-        horizontalGapCount = columns - 1;
+        int horizontalGapCount = columns - 1;
         childSize = (width - (horizontalGapCount * gap)) / columns;
     }
 
