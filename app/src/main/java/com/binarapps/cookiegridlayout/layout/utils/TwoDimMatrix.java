@@ -49,7 +49,7 @@ public class TwoDimMatrix {
         if (i + spanColumns <= row.length) {
           for (int j = 0; j < spanColumns; j++) {
             if (row[i + j]) {
-              continue;
+              break;
             } else if (j == spanColumns - 1 && placesBelowAreAvailable(k, i, spanColumns, spanRows)) {
               Log.d("klop", "Instert new element: " + k + ":" + i);
               bookPlaces(k, i, spanColumns, spanRows);
@@ -78,6 +78,7 @@ public class TwoDimMatrix {
 
   private boolean placesBelowAreAvailable(int rowPosition, int columnPosition, int spanColumns, int spanRows) {
     int count = 0;
+
 
     boolean[] row;
 

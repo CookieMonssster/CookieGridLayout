@@ -79,7 +79,11 @@ public class CookieGridLayoutDimensions {
     }
 
     public int calculateWidth(int startLeft, int spanColumns) {
-        return startLeft + childSize * spanColumns + gap * (spanColumns - 1);
+        int endRight = startLeft + childSize * spanColumns + gap * (spanColumns - 1);
+        if (workspaceRight - endRight < this.childSize) {
+            endRight = workspaceRight;
+        }
+        return endRight;
     }
 
     public int calculateHeight(int startTop, int spanRows) {
