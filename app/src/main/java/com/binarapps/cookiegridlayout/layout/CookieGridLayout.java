@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.binarapps.cookiegridlayout.R;
+import com.binarapps.cookiegridlayout.layout.utils.CookieGridLayoutDimensions;
 import com.binarapps.cookiegridlayout.layout.utils.TwoDimMatrix;
 
 import static android.view.View.MeasureSpec.EXACTLY;
@@ -49,7 +50,7 @@ public class CookieGridLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if(availableSpace==null) {
+        if(availableSpace == null) {
             availableSpace = new TwoDimMatrix(columns);
             for (int i = 0; i < getChildCount(); i++) {
                 final View child = getChildAt(i);
@@ -73,59 +74,42 @@ public class CookieGridLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean b, int left, int top, int right, int bottom) {
-        final int count = getChildCount();
 
-        int horizontalGapCount = columns - 1;
-        int currentRow = 0;
-        int currentColumn = 0;
+        CookieGridLayoutDimensions cookieDim = new CookieGridLayoutDimensions.Builder(getChildCount(), left, top, right, bottom)
+                .withPadding(getPaddingTop(), getPaddingLeft(), getPaddingRight(), getPaddingBottom())
+                .withColumns(columns)
+                .withGapPercent(gapPercent)
+                .build();
 
-        int workspaceLeft = getPaddingLeft();
-        int workspaceRight = right - left - getPaddingRight();
-        int workspaceTop = getPaddingTop();
-        int workspaceBottom = bottom - top - getPaddingBottom();
-
-        int width = workspaceRight - workspaceLeft;
-
-        int gap = Math.round(gapPercent * width);
-
-        int childSize = (width - (horizontalGapCount * gap)) / columns;
-
-
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < cookieDim.count; i++) {
             final View child = getChildAt(i);
             CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
 
-            int childSpanColumns = lp.spanColumns;
-            int childSpanRows = lp.spanRows;
-            if(availableSpace!=null) {
+            if(availableSpace != null) {
                 Point drawPoint = availableSpace.getPosition(i);
 
+                int startLeft = cookieDim.calculateStartLeft(drawPoint);
+                int startTop = cookieDim.calculateStartTop(drawPoint);
+                int childWidth = cookieDim.calculateWidth(startLeft, lp.spanColumns);
+                int childHeight = cookieDim.calculateHeight(startTop, lp.spanRows);
 
-                int startLeft = workspaceLeft + (drawPoint.x * childSize) + (drawPoint.x * gap);
-                int startTop = workspaceTop + (drawPoint.y * childSize) + (drawPoint.y * gap);
-
-                child.measure(makeMeasureSpec(childSize * childSpanColumns, EXACTLY), makeMeasureSpec(childSize * childSpanRows, EXACTLY));
+                child.measure(makeMeasureSpec(cookieDim.childSize * lp.spanColumns, EXACTLY),
+                        makeMeasureSpec(cookieDim.childSize * lp.spanRows, EXACTLY));
 
                 //            if(isNewRow(i, columns)) {
                 //                child.layout(startLeft, startTop, startLeft + (workspaceRight - startLeft), startTop + childHeight);
                 //            } else {
-                child.layout(startLeft, startTop, startLeft + childSize * childSpanColumns + gap * (childSpanColumns - 1),
-                  startTop + childSize * childSpanRows + gap * (childSpanRows - 1));
+                child.layout(startLeft, startTop, childWidth, childHeight);
                 //            }
 
-                if (isNewRow(i, columns)) {
-                    currentRow = currentRow + 1;
-                    currentColumn = 0;
+                if (cookieDim.isNewRow(i)) {
+                    cookieDim.currentRow = cookieDim.currentRow + 1;
+                    cookieDim.currentColumn = 0;
                 } else {
-                    currentColumn = currentColumn + 1;
+                    cookieDim.currentColumn = cookieDim.currentColumn + 1;
                 }
             }
         }
-    }
-
-
-    private boolean isNewRow(int i, int columns) {
-        return (i + 1) % columns == 0;
     }
 
     private void readAttributes(Context context, AttributeSet attrs) {
@@ -150,8 +134,8 @@ public class CookieGridLayout extends ViewGroup {
     }
 
     @Override
-    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
-        return p instanceof CookieGridLayout.LayoutParams;
+    protected boolean checkLayoutParams(ViewGroup.LayoutParams params) {
+        return params instanceof CookieGridLayout.LayoutParams;
     }
 
     @Override
