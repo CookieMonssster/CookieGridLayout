@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -79,7 +80,6 @@ public class CookieGridLayout extends ViewGroup {
     protected void onLayout(boolean b, int left, int top, int right, int bottom) {
         cookieDim.updatePadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom());
         cookieDim.updateDimensions(getChildCount(), left, top, right, bottom);
-
         for (int i = 0; i < cookieDim.getCount(); i++) {
             final View child = getChildAt(i);
             CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
@@ -89,17 +89,12 @@ public class CookieGridLayout extends ViewGroup {
 
                 int childLeft = cookieDim.calculateLeftPoint(drawPoint);
                 int childTop = cookieDim.calculateTopPoint(drawPoint);
-                int childRight = cookieDim.calculateRightPoint(childLeft, lp.spanColumns, drawPoint.x);
-                int childBottom = cookieDim.calculateBottomPoint(childTop, lp.spanRows, drawPoint.y);
+                int childRight = cookieDim.calculateRightPoint(childLeft, lp.spanColumns);
+                int childBottom = cookieDim.calculateBottomPoint(childTop, lp.spanRows);
 
-
-
-                child.measure(makeMeasureSpec(cookieDim.getRealChildSize(lp.spanColumns, drawPoint.x, getPaddingLeft()), EXACTLY),
-                        makeMeasureSpec(cookieDim.getRealChildSize(lp.spanRows, drawPoint.y, getPaddingTop()), EXACTLY));
-
+                child.measure(makeMeasureSpec(childRight-childLeft, MeasureSpec.EXACTLY),
+                        makeMeasureSpec(childBottom-childTop, MeasureSpec.EXACTLY));
                 child.layout(childLeft, childTop, childRight, childBottom);
-
-                cookieDim.checkThatIsNewRow(i);
             }
         }
     }
