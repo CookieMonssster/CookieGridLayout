@@ -1,171 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/activity_main"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:cookie="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@android:color/darker_gray"
-  tools:context="com.binarapps.cookiegridlayout.MainActivity">
-
-  <com.binarapps.cookiegridlayout.layout.CookieGridLayout
-    android:id="@+id/cookie"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cookie="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="3dp"
-    cookie:columns="6"
-    cookie:gap="0.01"
-    cookie:outsideGap="0">
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
+    tools:context="com.binarapps.cookiegridlayout.MainActivity">
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="1"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="2"
-      cookie:CookieLayout_spanRows="2" />
+    <com.binarapps.cookiegridlayout.layout.CookieGridLayout
+        android:id="@+id/cookie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        cookie:columns="6"
+        cookie:gap="0.004"
+        cookie:outsideGap="0">
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="2"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="2"
-      cookie:CookieLayout_spanRows="2" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="2" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="3"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="2"
-      cookie:CookieLayout_spanRows="2" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="2" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="4"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="4"
-      cookie:CookieLayout_spanRows="2" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="3"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="2" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="5"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="2"
-      cookie:CookieLayout_spanRows="2" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="4"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="4"
+            cookie:CookieLayout_spanRows="2" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="6"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="2"
-      cookie:CookieLayout_spanRows="2" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="5"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="2" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="7"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="4"
-      cookie:CookieLayout_spanRows="2" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="6"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="2" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="8"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="2"
-      cookie:CookieLayout_spanRows="2" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="7"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="4"
+            cookie:CookieLayout_spanRows="2" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="9"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="1"
-      cookie:CookieLayout_spanRows="1" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="8"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="2" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="10"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="1"
-      cookie:CookieLayout_spanRows="1" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="9"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="1"
+            cookie:CookieLayout_spanRows="1" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="10"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="1"
+            cookie:CookieLayout_spanRows="1" />
 
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="11"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="2"
-      cookie:CookieLayout_spanRows="4" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="11"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="4" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="12"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="1"
-      cookie:CookieLayout_spanRows="1" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="12"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="1"
+            cookie:CookieLayout_spanRows="1" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="13"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="1"
-      cookie:CookieLayout_spanRows="1" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="13"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="1"
+            cookie:CookieLayout_spanRows="1" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="14"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="2"
-      cookie:CookieLayout_spanRows="2" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="14"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="2" />
 
-    <Button
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:background="@color/colorPrimaryDark"
-      android:gravity="center"
-      android:text="14"
-      android:textColor="@android:color/white"
-      cookie:CookieLayout_spanColumns="2"
-      cookie:CookieLayout_spanRows="2" />
-  </com.binarapps.cookiegridlayout.layout.CookieGridLayout>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="15"
+            android:textColor="@android:color/white"
+            cookie:CookieLayout_spanColumns="2"
+            cookie:CookieLayout_spanRows="2" />
+    </com.binarapps.cookiegridlayout.layout.CookieGridLayout>
 </ScrollView>

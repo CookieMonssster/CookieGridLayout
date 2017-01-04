@@ -89,11 +89,13 @@ public class CookieGridLayout extends ViewGroup {
 
                 int childLeft = cookieDim.calculateLeftPoint(drawPoint);
                 int childTop = cookieDim.calculateTopPoint(drawPoint);
-                int childRight = cookieDim.calculateRightPoint(childLeft, lp.spanColumns);
-                int childBottom = cookieDim.calculateBottomPoint(childTop, lp.spanRows);
+                int childRight = cookieDim.calculateRightPoint(childLeft, lp.spanColumns, drawPoint.x);
+                int childBottom = cookieDim.calculateBottomPoint(childTop, lp.spanRows, drawPoint.y);
 
-                child.measure(makeMeasureSpec(cookieDim.getChildSize() * lp.spanColumns, EXACTLY),
-                        makeMeasureSpec(cookieDim.getChildSize() * lp.spanRows, EXACTLY));
+
+
+                child.measure(makeMeasureSpec(cookieDim.getRealChildSize(lp.spanColumns, drawPoint.x, getPaddingLeft()), EXACTLY),
+                        makeMeasureSpec(cookieDim.getRealChildSize(lp.spanRows, drawPoint.y, getPaddingTop()), EXACTLY));
 
                 child.layout(childLeft, childTop, childRight, childBottom);
 

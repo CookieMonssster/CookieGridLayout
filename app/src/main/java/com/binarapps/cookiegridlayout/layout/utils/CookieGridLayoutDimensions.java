@@ -8,6 +8,7 @@ import android.graphics.Point;
 
 public class CookieGridLayoutDimensions {
 
+    private static final int MAX_VERTICAL_POSITIONS = 303;
 
     private int workspaceTop, workspaceLeft, workspaceRight, workspaceBottom;
     private int paddingLeft, paddingRight, paddingTop, paddingBottom;
@@ -17,8 +18,8 @@ public class CookieGridLayoutDimensions {
     private int count;
 
     private int columns = 1;
-    public int currentRow = 0;
-    public int currentColumn = 0;
+    private int currentRow = 0;
+    private int currentColumn = 0;
 
 
     public CookieGridLayoutDimensions(Builder builder) {
@@ -36,6 +37,24 @@ public class CookieGridLayoutDimensions {
 
     public int getChildSize() {
         return childSize;
+    }
+
+    public int getGap() { return gap; }
+
+    public int getWorkspaceTop() {
+        return workspaceTop;
+    }
+
+    public int getWorkspaceLeft() {
+        return workspaceLeft;
+    }
+
+    public int getWorkspaceRight() {
+        return workspaceRight;
+    }
+
+    public int getWorkspaceBottom() {
+        return workspaceBottom;
     }
 
     public void updatePadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
@@ -61,27 +80,47 @@ public class CookieGridLayoutDimensions {
     }
 
     public int calculateLeftPoint(Point drawPoint) {
-        return workspaceLeft + (drawPoint.x * childSize) + (drawPoint.x * gap);
+        if(drawPoint.x >= columns) {
+            return 0;
+        }
+        return calculatePosition(workspaceLeft, drawPoint.x);
     }
 
     public int calculateTopPoint(Point drawPoint) {
-        return workspaceTop + (drawPoint.y * childSize) + (drawPoint.y * gap);
+        if(drawPoint.y >= MAX_VERTICAL_POSITIONS) {
+            return 0;
+        }
+        return calculatePosition(workspaceTop, drawPoint.y);
     }
 
-    public boolean isNewRow(int i) {
-        return (i + 1) % columns == 0;
+    private int calculatePosition(int workspaceCoordinate, int pointCoordinate) {
+        if(pointCoordinate > 0) {
+            return workspaceCoordinate + (pointCoordinate * childSize) + (pointCoordinate * gap);
+        }
+        return 0;
     }
 
-    public int calculateRightPoint(int startLeft, int spanColumns) {
-        int endRight = startLeft + childSize * spanColumns + gap * (spanColumns - 1);
+    public int calculateRightPoint(int startLeft, int spanColumns, int position) {
+        int endRight = startLeft + (childSize * spanColumns) + gap * (spanColumns - 1);
         if (workspaceRight - endRight < this.childSize) {
-            endRight = workspaceRight;
+            return workspaceRight;
+        }
+        if(position == 0) {
+            return endRight + paddingLeft;
         }
         return endRight;
     }
 
-    public int calculateBottomPoint(int startTop, int spanRows) {
-        return startTop + childSize * spanRows + gap * (spanRows - 1);
+    public int calculateBottomPoint(int startTop, int spanRows, int position) {
+        int endBottom = startTop + childSize * spanRows + gap * (spanRows - 1);
+        if(position == 0) {
+            return endBottom + paddingTop;
+        }
+        return endBottom;
+    }
+
+    public boolean isNewRow(int i) {
+        return (i + 1) % columns == 0;
     }
 
     public void checkThatIsNewRow(int i) {
@@ -93,7 +132,18 @@ public class CookieGridLayoutDimensions {
         }
     }
 
+    public int getRealChildSize(int span, int pos, int padding) {
+        int realChildSize = childSize * span + gap * (span - 1);
+        if(pos == 0) {
+            return realChildSize + 2 * padding;
+        }
+        return realChildSize;
+    }
+
     public static class Builder {
+        private static final float MINIMUM_GAP_PERCENT = 0f;
+        private static final float MAXIMUM_GAP_SURFACE = 0.5f;
+
         private int columns = 1;
         private float gapPercent = 0.05f;
 
@@ -102,12 +152,30 @@ public class CookieGridLayoutDimensions {
         }
 
         public Builder withGapPercent(float percent) {
+            if(percent < MINIMUM_GAP_PERCENT) {
+                gapPercent = MINIMUM_GAP_PERCENT;
+                return this;
+            }
+            float maxGap = getMaximumGap();
+
+            if(percent > maxGap) {
+                this.gapPercent = maxGap;
+                return this;
+            }
             this.gapPercent = percent;
             return this;
         }
 
         public CookieGridLayoutDimensions build() {
             return new CookieGridLayoutDimensions(this);
+        }
+
+        private float getMaximumGap() {
+            if (columns > 1)
+                return MAXIMUM_GAP_SURFACE / (columns - 1);
+            else {
+                return MINIMUM_GAP_PERCENT;
+            }
         }
     }
 
