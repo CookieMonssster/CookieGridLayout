@@ -57,7 +57,7 @@ public class CookieGridLayoutDimensionsSpec extends RoboSpecification {
     }
 
     @Unroll
-    def "Checking left and top point calculations"() {
+    def "Checking left, top, right and bottom point calculations"() {
         given:
         def cookieDim = new CookieGridLayoutDimensions.Builder(4)
                 .withGapPercent(0.01)
@@ -67,22 +67,25 @@ public class CookieGridLayoutDimensionsSpec extends RoboSpecification {
         when:
         def left = cookieDim.calculateLeftPoint(point)
         def top = cookieDim.calculateTopPoint(point)
+        def right = cookieDim.calculateRightPoint(left, spanColumns, point.x)
+        def bottom = cookieDim.calculateBottomPoint(top, spanRows, point.y)
         then:
         left == left_result
         top == top_result
+        right == right_result
+        bottom == bottom_result
         where:
-        x                 | y                 | left_result | top_result
-        0                 | 0                 | 0           | 0
-        -1                | -3                | 0           | 0
-        2                 | 0                 | 404         | 0
-        0                 | 2                 | 0           | 404
-        50                | 50                | 0           | 10100
-        Integer.MAX_VALUE | 2                 | 0           | 404
-        2                 | 303               | 404         | 0
-        2                 | Integer.MAX_VALUE | 404         | 0
-        Integer.MIN_VALUE | Integer.MIN_VALUE | 0           | 0
+        spanRows | spanColumns | x                 | y                 | left_result | top_result | right_result | bottom_result
+        1        | 1           | 0                 | 0                 | 0           | 0          | 194          | 194
+        1        | 1           | -1                | -3                | 0           | 0          | 194          | 194
+        1        | 1           | 2                 | 0                 | 404         | 0          | 598          | 194
+        1        | 1           | 0                 | 2                 | 0           | 404        | 194          | 598
+        2        | 3           | 50                | 50                | 0           | 10100      | 598          | 10496
+        1        | 1           | Integer.MAX_VALUE | 2                 | 0           | 404        | 194          | 598
+        1        | 1           | 2                 | 303               | 404         | 0          | 598          | 194
+        2        | 2           | Integer.MAX_VALUE | 404               | 0           | 0          | 396          | 396
+        1        | 2           | Integer.MIN_VALUE | Integer.MIN_VALUE | 0           | 0          | 396          | 194
     }
-
 
 
 }

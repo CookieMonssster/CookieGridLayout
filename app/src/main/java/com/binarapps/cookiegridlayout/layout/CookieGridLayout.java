@@ -20,6 +20,9 @@ import static android.view.View.MeasureSpec.makeMeasureSpec;
 
 public class CookieGridLayout extends ViewGroup {
 
+    private static final int DEFAULT_COLUMN_COUNT = 1;
+    private static final int DEFAULT_SPAN = 1;
+
     private int columns;
 
     private float gapPercent;
@@ -92,14 +95,10 @@ public class CookieGridLayout extends ViewGroup {
                 int childRight = cookieDim.calculateRightPoint(childLeft, lp.spanColumns, drawPoint.x);
                 int childBottom = cookieDim.calculateBottomPoint(childTop, lp.spanRows, drawPoint.y);
 
-
-
                 child.measure(makeMeasureSpec(cookieDim.getRealChildSize(lp.spanColumns, drawPoint.x, getPaddingLeft()), EXACTLY),
                         makeMeasureSpec(cookieDim.getRealChildSize(lp.spanRows, drawPoint.y, getPaddingTop()), EXACTLY));
 
                 child.layout(childLeft, childTop, childRight, childBottom);
-
-                cookieDim.checkThatIsNewRow(i);
             }
         }
     }
@@ -111,7 +110,7 @@ public class CookieGridLayout extends ViewGroup {
             gapPercent = a.getFloat(R.styleable.CookieGridLayout_gap, 0.01f);
             outsideGapPercent = a.getFloat(R.styleable.CookieGridLayout_outsideGap, 0.01f);
             columns = a.getInteger(R.styleable.CookieGridLayout_columns, 3);
-            if (columns == 0) {
+            if (columns <= 0) {
                 columns = 1;
             }
         } finally {
@@ -143,9 +142,18 @@ public class CookieGridLayout extends ViewGroup {
             super(c, attrs);
 
             TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.CookieGridLayout_Layout);
-            spanColumns = a.getInt(R.styleable.CookieGridLayout_Layout_CookieLayout_spanColumns, 1);
-            spanRows = a.getInt(R.styleable.CookieGridLayout_Layout_CookieLayout_spanRows, 1);
-            a.recycle();
+            try {
+                spanColumns = a.getInt(R.styleable.CookieGridLayout_Layout_CookieLayout_spanColumns, DEFAULT_SPAN);
+                if (spanColumns <= 0) {
+                    spanColumns = DEFAULT_SPAN;
+                }
+                    spanRows = a.getInt(R.styleable.CookieGridLayout_Layout_CookieLayout_spanRows, DEFAULT_SPAN);
+                if(spanRows <= 0) {
+                    spanRows = DEFAULT_SPAN;
+                }
+            } finally {
+                a.recycle();
+            }
         }
 
         public LayoutParams(int width, int height) {
