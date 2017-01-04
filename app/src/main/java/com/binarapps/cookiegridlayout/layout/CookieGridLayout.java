@@ -92,12 +92,11 @@ public class CookieGridLayout extends ViewGroup {
 
                 int childLeft = cookieDim.calculateLeftPoint(drawPoint);
                 int childTop = cookieDim.calculateTopPoint(drawPoint);
-                int childRight = cookieDim.calculateRightPoint(childLeft, lp.spanColumns, drawPoint.x);
-                int childBottom = cookieDim.calculateBottomPoint(childTop, lp.spanRows, drawPoint.y);
+                int childRight = cookieDim.calculateRightPoint(childLeft, lp.spanColumns);
+                int childBottom = cookieDim.calculateBottomPoint(childTop, lp.spanRows);
 
-                child.measure(makeMeasureSpec(cookieDim.getRealChildSize(lp.spanColumns, drawPoint.x, getPaddingLeft()), EXACTLY),
-                        makeMeasureSpec(cookieDim.getRealChildSize(lp.spanRows, drawPoint.y, getPaddingTop()), EXACTLY));
-
+                child.measure(makeMeasureSpec(childRight-childLeft, MeasureSpec.EXACTLY),
+                        makeMeasureSpec(childBottom-childTop, MeasureSpec.EXACTLY));
                 child.layout(childLeft, childTop, childRight, childBottom);
             }
         }
@@ -110,7 +109,7 @@ public class CookieGridLayout extends ViewGroup {
             gapPercent = a.getFloat(R.styleable.CookieGridLayout_gap, 0.01f);
             outsideGapPercent = a.getFloat(R.styleable.CookieGridLayout_outsideGap, 0.01f);
             columns = a.getInteger(R.styleable.CookieGridLayout_columns, 3);
-            if (columns <= 0) {
+            if (columns == 0) {
                 columns = 1;
             }
         } finally {

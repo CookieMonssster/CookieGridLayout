@@ -67,8 +67,8 @@ public class CookieGridLayoutDimensionsSpec extends RoboSpecification {
         when:
         def left = cookieDim.calculateLeftPoint(point)
         def top = cookieDim.calculateTopPoint(point)
-        def right = cookieDim.calculateRightPoint(left, spanColumns, point.x)
-        def bottom = cookieDim.calculateBottomPoint(top, spanRows, point.y)
+        def right = cookieDim.calculateRightPoint(left, spanColumns)
+        def bottom = cookieDim.calculateBottomPoint(top, spanRows)
         then:
         left == left_result
         top == top_result
@@ -87,5 +87,33 @@ public class CookieGridLayoutDimensionsSpec extends RoboSpecification {
         1        | 2           | Integer.MIN_VALUE | Integer.MIN_VALUE | 0           | 0          | 396          | 194
     }
 
+    @Unroll
+    def "Checking left and top point calculations with padding"() {
+        given:
+        def cookieDim = new CookieGridLayoutDimensions.Builder(4)
+                .withGapPercent(0.01)
+                .build();
+        cookieDim.updatePadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
+        cookieDim.updateDimensions(1, 0, 0, 800, 1200)
+        def point = new Point(x, y)
+        when:
+        def left = cookieDim.calculateLeftPoint(point)
+        def top = cookieDim.calculateTopPoint(point)
+        then:
+        left == left_result
+        top == top_result
+        where:
+        x                 | y                 | paddingLeft | paddingTop | paddingRight | paddingBottom | left_result | top_result
+        0                 | 0                 | 10          | 10         | 10           | 10            | 10          | 10
+        0                 | 0                 | 5           | 20         | 5            | 20            | 5           | 20
+        -1                | -3                | 10          | 10         | 10           | 10            | 10          | 10
+        2                 | 0                 | 10          | 10         | 10           | 10            | 404         | 10
+        0                 | 2                 | 10          | 10         | 10           | 10            | 10          | 404
+        50                | 50                | 10          | 10         | 10           | 10            | 10          | 9860
+        Integer.MAX_VALUE | 2                 | 10          | 10         | 10           | 10            | 10          | 404
+        2                 | 303               | 10          | 10         | 10           | 10            | 404         | 10
+        2                 | Integer.MAX_VALUE | 10          | 10         | 10           | 10            | 404         | 10
+        Integer.MIN_VALUE | Integer.MIN_VALUE | 10          | 10         | 10           | 10            | 10          | 10
+    }
 
 }

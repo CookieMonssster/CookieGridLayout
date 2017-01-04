@@ -19,8 +19,6 @@ public class CookieGridLayoutDimensions {
     private int count;
 
     private int columns = 1;
-    private int currentRow = 0;
-    private int currentColumn = 0;
 
 
     public CookieGridLayoutDimensions(Builder builder) {
@@ -82,52 +80,40 @@ public class CookieGridLayoutDimensions {
 
     public int calculateLeftPoint(Point drawPoint) {
         if(drawPoint.x >= columns || drawPoint.x < 0) {
-            return START_POSITION;
+            return workspaceLeft;
         }
         return calculatePosition(workspaceLeft, drawPoint.x);
     }
 
     public int calculateTopPoint(Point drawPoint) {
         if(drawPoint.y >= MAX_VERTICAL_POSITIONS || drawPoint.y < 0) {
-            return START_POSITION;
+            return workspaceTop;
         }
         return calculatePosition(workspaceTop, drawPoint.y);
     }
 
     private int calculatePosition(int workspaceCoordinate, int pointCoordinate) {
-        if(pointCoordinate > START_POSITION) {
+        if(pointCoordinate >= START_POSITION) {
             return workspaceCoordinate + (pointCoordinate * childSize) + (pointCoordinate * gap);
         }
-        return START_POSITION;
+        return workspaceCoordinate;
     }
 
-    public int calculateRightPoint(int startLeft, int spanColumns, int position) {
-        if(startLeft > (workspaceRight - workspaceLeft)) {
-            startLeft = START_POSITION;
-        }
+    public int calculateRightPoint(int startLeft, int spanColumns) {
         int endRight = startLeft + (childSize * spanColumns) + gap * (spanColumns - 1);
         if (workspaceRight - endRight < this.childSize) {
             return workspaceRight;
         }
-        if(position == START_POSITION) {
-            return endRight + paddingLeft;
-        }
         return endRight;
     }
 
-    public int calculateBottomPoint(int startTop, int spanRows, int position) {
+    public int calculateBottomPoint(int startTop, int spanRows) {
         int endBottom = startTop + childSize * spanRows + gap * (spanRows - 1);
-        if(position == START_POSITION) {
-            return endBottom + paddingTop;
-        }
         return endBottom;
     }
 
-    public int getRealChildSize(int span, int pos, int padding) {
+    public int getRealChildSize(int span) {
         int realChildSize = childSize * span + gap * (span - 1);
-        if(pos == START_POSITION) {
-            return realChildSize + 2 * padding;     //TODO ogarnij tej hack
-        }
         return realChildSize;
     }
 
