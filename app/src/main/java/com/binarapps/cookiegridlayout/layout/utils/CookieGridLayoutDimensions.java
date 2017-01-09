@@ -14,7 +14,7 @@ public class CookieGridLayoutDimensions {
     private int workspaceTop, workspaceLeft, workspaceRight, workspaceBottom;
     private int paddingLeft, paddingRight, paddingTop, paddingBottom;
     private float gapPercent;
-    private int gap;
+    private int gapInPixels;
     private int childSize;
     private int count;
 
@@ -38,7 +38,7 @@ public class CookieGridLayoutDimensions {
         return childSize;
     }
 
-    public int getGap() { return gap; }
+    public int getGapInPixels() { return gapInPixels; }
 
     public int getWorkspaceTop() {
         return workspaceTop;
@@ -72,10 +72,10 @@ public class CookieGridLayoutDimensions {
         this.workspaceBottom = bottom - top - paddingBottom;
 
         int width = workspaceRight - workspaceLeft;
-        this.gap = Math.round(gapPercent * width);
+        this.gapInPixels = Math.round(gapPercent * width);
 
         int horizontalGapCount = columns - 1;
-        childSize = (width - (horizontalGapCount * gap)) / columns;
+        childSize = (width - (horizontalGapCount * gapInPixels)) / columns;
     }
 
     public int calculateLeftPoint(Point drawPoint) {
@@ -94,13 +94,13 @@ public class CookieGridLayoutDimensions {
 
     private int calculatePosition(int workspaceCoordinate, int pointCoordinate) {
         if(pointCoordinate >= START_POSITION) {
-            return workspaceCoordinate + (pointCoordinate * childSize) + (pointCoordinate * gap);
+            return workspaceCoordinate + (pointCoordinate * childSize) + (pointCoordinate * gapInPixels);
         }
         return workspaceCoordinate;
     }
 
     public int calculateRightPoint(int startLeft, int spanColumns) {
-        int endRight = startLeft + (childSize * spanColumns) + gap * (spanColumns - 1);
+        int endRight = startLeft + (childSize * spanColumns) + gapInPixels * (spanColumns - 1);
         if (workspaceRight - endRight < this.childSize) {
             return workspaceRight;
         }
@@ -108,12 +108,12 @@ public class CookieGridLayoutDimensions {
     }
 
     public int calculateBottomPoint(int startTop, int spanRows) {
-        int endBottom = startTop + childSize * spanRows + gap * (spanRows - 1);
+        int endBottom = startTop + childSize * spanRows + gapInPixels * (spanRows - 1);
         return endBottom;
     }
 
     public int getRealChildSize(int span) {
-        int realChildSize = childSize * span + gap * (span - 1);
+        int realChildSize = childSize * span + gapInPixels * (span - 1);
         return realChildSize;
     }
 

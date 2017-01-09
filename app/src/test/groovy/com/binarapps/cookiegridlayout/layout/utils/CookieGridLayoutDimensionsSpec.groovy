@@ -22,7 +22,7 @@ public class CookieGridLayoutDimensionsSpec extends RoboSpecification {
         when:
         cookieDim.updateDimensions(count, left, top, right, bottom)
         then:
-        cookieDim.gap == result_gap
+        cookieDim.gapInPixels == result_gap
         cookieDim.childSize == result_childSize
         cookieDim.workspaceLeft == result_workspaceLeft
         cookieDim.workspaceBottom == result_workspaceBottom
@@ -44,7 +44,7 @@ public class CookieGridLayoutDimensionsSpec extends RoboSpecification {
         cookieDim.updatePadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
         cookieDim.updateDimensions(count, 0, 0, 500, 500)
         then:
-        cookieDim.gap == result_gap
+        cookieDim.gapInPixels == result_gap
         cookieDim.childSize == result_childSize
         cookieDim.workspaceLeft == result_workspaceLeft
         cookieDim.workspaceBottom == result_workspaceBottom

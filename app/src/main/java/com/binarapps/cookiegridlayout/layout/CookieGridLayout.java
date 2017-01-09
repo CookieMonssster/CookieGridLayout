@@ -26,7 +26,6 @@ public class CookieGridLayout extends ViewGroup {
     private int columns;
 
     private float gapPercent;
-    private float outsideGapPercent;
     private TwoDimMatrix availableSpace;
 
     private CookieGridLayoutDimensions cookieDim;
