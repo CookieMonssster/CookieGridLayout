@@ -107,7 +107,6 @@ public class CookieGridLayout extends ViewGroup {
 
         try {
             gapPercent = a.getFloat(R.styleable.CookieGridLayout_gap, 0.01f);
-            outsideGapPercent = a.getFloat(R.styleable.CookieGridLayout_outsideGap, 0.01f);
             columns = a.getInteger(R.styleable.CookieGridLayout_columns, 3);
             if (columns == 0) {
                 columns = 1;

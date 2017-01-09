@@ -15,8 +15,7 @@
         android:background="@android:color/white"
         android:padding="10dp"
         cookie:columns="6"
-        cookie:gap="0.01"
-        cookie:outsideGap="0">
+        cookie:gap="1">
 
         <Button
             android:layout_width="0dp"

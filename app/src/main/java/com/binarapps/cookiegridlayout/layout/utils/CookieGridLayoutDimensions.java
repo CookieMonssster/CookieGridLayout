@@ -120,15 +120,17 @@ public class CookieGridLayoutDimensions {
     public static class Builder {
         private static final float MINIMUM_GAP_PERCENT = 0f;
         private static final float MAXIMUM_GAP_SURFACE = 0.5f;
+        private static final float PERCENT_BREAKER = 100;
 
         private int columns = 1;
-        private float gapPercent = 0.05f;
+        private float gapPercent = 5f;
 
         public Builder(int columns) {
             this.columns = columns;
         }
 
         public Builder withGapPercent(float percent) {
+            percent = percent / PERCENT_BREAKER;
             if(percent < MINIMUM_GAP_PERCENT) {
                 gapPercent = MINIMUM_GAP_PERCENT;
                 return this;
