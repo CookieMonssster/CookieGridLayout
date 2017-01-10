@@ -38,7 +38,12 @@ public class TwoDimMatrix {
   }
 
 
-  public Point addNewElement(int spanColumns, int spanRows) {
+  public Point addNewElement(int spanColumns, int spanRows, boolean isGone) {
+    if(isGone){
+      Point point  = new Point(0,0);
+      coordinates.add(point);
+      return point;
+    }
     if (spanColumns > columns)
       throw new IllegalStateException("Too many columns to span!");
     int k = 0;
@@ -53,8 +58,9 @@ public class TwoDimMatrix {
             } else if (j == spanColumns - 1 && placesBelowAreAvailable(k, i, spanColumns, spanRows)) {
               Log.d("klop", "Instert new element: " + k + ":" + i);
               bookPlaces(k, i, spanColumns, spanRows);
-              coordinates.add(new Point(i, k));
-              return new Point(i, k);
+              Point point  = new Point(i,k);
+              coordinates.add(point);
+              return point;
             }
           }
         }

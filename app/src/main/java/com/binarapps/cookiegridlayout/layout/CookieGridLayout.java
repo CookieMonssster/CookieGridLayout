@@ -59,11 +59,9 @@ public class CookieGridLayout extends ViewGroup {
             availableSpace = new TwoDimMatrix(columns);
             for (int i = 0; i < getChildCount(); i++) {
                 final View child = getChildAt(i);
-                if(child.getVisibility() == GONE) {
-                    continue;
-                }
+
                 CookieGridLayout.LayoutParams lp = (CookieGridLayout.LayoutParams) child.getLayoutParams();
-                availableSpace.addNewElement(lp.spanColumns, lp.spanRows);
+                availableSpace.addNewElement(lp.spanColumns, lp.spanRows, child.getVisibility() == GONE);
             }
         }
         if(getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT) {

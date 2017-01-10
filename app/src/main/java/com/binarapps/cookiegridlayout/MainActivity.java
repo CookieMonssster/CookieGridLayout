@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         animationTool.setBackground(view.getBackground());
 
         ScaleAnimation scale = new ScaleAnimation(0,10,0,10, view.getWidth()/2, view.getHeight()/2);
-        scale.setDuration(500);
+        scale.setDuration(250);
         scale.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
