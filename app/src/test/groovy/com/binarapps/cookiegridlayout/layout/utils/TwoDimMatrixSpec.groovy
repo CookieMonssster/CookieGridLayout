@@ -21,7 +21,7 @@ public class TwoDimMatrixSpec extends RoboSpecification {
 
     def "Adding new element to the layout"() {
         when:
-        def point = twoDimMatrix.addNewElement(spanColumns, spanRows)
+        def point = twoDimMatrix.addNewElement(spanColumns, spanRows, false)
         then:
         x == point.x
         y == point.y
@@ -63,7 +63,7 @@ public class TwoDimMatrixSpec extends RoboSpecification {
 
     def "Adding new element to the layout 2"() {
         when:
-        def point = twoDimMatrix.addNewElement(spanColumns, spanRows)
+        def point = twoDimMatrix.addNewElement(spanColumns, spanRows,false)
         then:
         x == point.x
         y == point.y
