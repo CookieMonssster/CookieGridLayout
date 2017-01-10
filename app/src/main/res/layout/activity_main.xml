@@ -18,9 +18,10 @@
         cookie:gap="1">
 
         <Button
+            android:id="@+id/button_1"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="1"
             android:textColor="@android:color/white"
@@ -88,6 +89,7 @@
             cookie:CookieLayout_spanRows="2" />
 
         <Button
+            android:id="@+id/button_8"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/colorPrimaryDark"
@@ -167,5 +169,12 @@
             android:textColor="@android:color/white"
             cookie:CookieLayout_spanColumns="2"
             cookie:CookieLayout_spanRows="2" />
+
+        <Button
+            android:id="@+id/animationTool"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorAccent" />
+
     </com.binarapps.cookiegridlayout.layout.CookieGridLayout>
 </ScrollView>
